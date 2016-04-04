@@ -1,14 +1,6 @@
 const MyTODO = React.createClass({
-  componentWillMount() {
-    vyom_main(this);
-  },
   render() {
-    return vyom_render()
-            // return <View style={styles.container}>
-            //     <Text style={styles.welcome}>
-            //         Welcome to React Native Desktop!
-            //     </Text>
-            // </View>
+    return app.render()
   }
 });
 

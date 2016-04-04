@@ -3,6 +3,7 @@ const {
     Text,
     View,
     AppRegistry,
+    TouchableHighlight,
     StyleSheet
 } = React;
 
@@ -29,9 +30,11 @@ const MyTODOView = createClass({
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>
-                    {this.state.name}, Welcome to React Native Desktop!
-                </Text>
+                <TouchableHighlight onPress={this.props.save}>
+                    <Text style={styles.welcome}>
+                        {this.state.name}, Welcome to React Native Desktop!
+                    </Text>
+                </TouchableHighlight>
                 <Text style={styles.instructions}>
                     To get started, edit index.osx.js
                 </Text>

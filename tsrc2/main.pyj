@@ -3,27 +3,18 @@ from vyom2.events import Observable
 from vyom2.widgets import ReactyWidget
 
 class TODO(Controller):
-	def init(self, root):
-		self.root = root
+	def init(self):
 		self.data = Observable({"name": "init"})
 		self.widget = ReactyWidget(MyTODOView, self.data, {
 			"save": self.save.bind(self)
 		})
-		setTimeout(self.save.bind(self), 1000)
 
 	def render(self):
 		return self.widget.render()
 
-	def save(self):
-		console.log("save", self.robj)
+	def save(self, evt):
+		console.log("save", self.widget.robj)
 		self.data({"name": "amitu"})
-		# evt.preventDefault()
+		evt.preventDefault()
 
-todo = None
-
-def vyom_main(root):
-	nonlocal todo
-	todo = TODO(root)
-
-def vyom_render():
-	return todo.render()
+app = TODO()

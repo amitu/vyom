@@ -7,8 +7,6 @@ class ReactyWidget:
         self.evts.parent = self
         self.data = data
 
-        self.render()
-
         if self.data.is_observable:
             self.data.connect(self.rerender.bind(self))
 
