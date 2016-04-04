@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+
+class Controller:
+    def __init__(self, elem, args):
+        self.init(elem, args)
+
+    def init(self, elem, args):
+        pass
+
+    def update(self, key, value):
+        data = self.data()
+        data[key] = value
+        self.data(data)

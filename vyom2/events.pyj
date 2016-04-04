@@ -1,0 +1,39 @@
+# -*- coding: utf-8 -*-
+
+import vyom2.types
+from vyom2 import NotPassed
+
+
+def Observable(val=None, type=vyom2.types.Any):
+    # TODO: type is inspired by React's propType
+    # look at React's documentation to see all types
+    # and possibly how to implement the checks.
+
+    # it is optional feature, and call
+    # vyom.setup(check_types=True) to activate it
+
+    value = val
+    connections = list()
+
+    ovable = def(val=NotPassed):
+        nonlocal value
+        if val is NotPassed:
+            return value
+
+        ovalue = value
+        value = val
+
+        for fn in connections:
+            fn(value, ovalue)
+
+    ovable.connect = def (fn, bind=NotPassed):
+        connections.append(fn)
+
+        return {
+            "remove": def():
+                connections.remove(fn)
+        }
+
+    ovable.is_observable = True
+    return ovable
+

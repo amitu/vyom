@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+
+
+class Exception(Error):
+    def __init__(self, message):
+        self.message = message
+
+
+# class object:
+#     pass
+
+
+NotPassed = 123123

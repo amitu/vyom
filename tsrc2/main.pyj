@@ -1,0 +1,14 @@
+from vyom2.controllers import Controller
+from vyom2.widgets import ReactyWidget
+
+class TODO(Controller):
+	def init(self):
+		self.widget = ReactyWidget(MyTODOView, {}, {})
+
+	def render(self):
+		return self.widget.render()
+
+def vyom_main():
+	todo = TODO()
+	return todo.render()
+	# return React.createElement(MyTODOView, {})
