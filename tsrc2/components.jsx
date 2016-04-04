@@ -8,11 +8,18 @@ const {
 
 
 const MyTODOView = React.createClass({
+    getInitialState() {
+        return {"name": "foo"};
+    },
+    componentWillMount() {
+        console.log("MyTODOView.componentWillMount", this.props, this.state);
+        this.props.ctrlr.robj = this;
+    },
     render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
-                    Welcome to React Native Desktop!
+                    {this.state.name}, Welcome to React Native Desktop!
                 </Text>
                 <Text style={styles.instructions}>
                     To get started, edit index.osx.js
