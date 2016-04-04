@@ -24,4 +24,5 @@ class ReactyWidget:
             data = self.data()
         else:
             data = self.data
+        self.evts.state = data
         return React.createElement(self.component, self.evts)
