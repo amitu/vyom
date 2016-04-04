@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 class Controller:
-    def __init__(self, elem, args):
-        self.init(elem, args)
+    def __init__(self, data, evts):
+        self.init(data, evts, evts)
 
-    def init(self, elem, args):
-        pass
+    def render(self):
+        return self.widget.render()
 
     def update(self, key, value):
         data = self.data()

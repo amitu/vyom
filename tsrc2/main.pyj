@@ -2,19 +2,67 @@ from vyom2.controllers import Controller
 from vyom2.events import Observable
 from vyom2.widgets import ReactyWidget
 
-class TODO(Controller):
-	def init(self):
-		self.data = Observable({"name": "init"})
-		self.widget = ReactyWidget(MyTODOView, self.data, {
-			"save": self.save.bind(self)
+
+class ToDoList(Controller):
+	def __init__(self, parent, name, data, evts):
+		console.log("ToDoList.__init__", name, data, evts)
+		self.parent = parent
+		self.name = name
+		self.data = data
+		self.widget = ReactyWidget(self, MyTODOListView, self.data, {
+			"select": self.selected.bind(self)
 		})
 
-	def render(self):
-		return self.widget.render()
+	def init(self):
+		console.log("ToDoList.init", self.parent)
+		# if self.parent:
+		# 	self.parent.add_child(self.name)
 
-	def save(self, evt):
-		console.log("save", self.widget.robj)
-		self.data({"name": "amitu"})
-		evt.preventDefault()
+	def selected(self, idx):
+		self.emit("selected", self.data()[idx])
+
+
+class ToDoDetail(Controller):
+	def __init__(self, data, evts):
+		self.data = data
+		self.widget = ReactyWidget(MyTODODetailView, self.data, {})
+
+
+class TODO(Controller):
+	def __init__(self, parent, name, data, evts):
+		self.parent = parent
+		self.name = name
+
+		if not data:
+			data = Observable({"items": ["get milk", "throw milk"]})
+
+		self.data = data
+		self.children = Observable({})
+		self.widget = ReactyWidget(self, LRView, self.children, {})
+
+	def init(self):
+		console.log("TODO.init")
+		if self.parent:
+			self.parent.add_child(self.name, self)
+
+		console.log("going to render lctrlr", self.data())
+
+		self.lctrlr = ToDoList(self, "left", self.data, {
+			"selected": self.selected.bind(self)
+		})
+
+		self.add_child("left", self.lctrlr.render())
+
+		# self.current = Observable({"text": "loading.."})
+		# self.rctrlr = ToDoDetail(data=self.current)
+
+	def selected(self, item):
+		self.current({"text": item})
+
+	def add_child(self, name, child):
+		console.log(self, name, child)
+		c = self.children()
+		c[name] = self.lctrlr.render()
+		self.children(c)
 
 app = TODO()

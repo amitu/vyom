@@ -11,9 +11,16 @@ const {
 function createClass(cls) {
     if (!cls.componentWillMount) {
         cls.componentWillMount = function() {
-            this.props.parent.robj = this;
             if (this.props.state)
                 this.setState(this.props.state);
+        }
+    }
+
+    if (!cls.componentDidMount) {
+        cls.componentDidMount = function() {
+            console.log("componentDidMount", this.props.init, this.props)
+            if (this.props.init)
+                this.props.init(this);
         }
     }
 
@@ -26,24 +33,35 @@ function createClass(cls) {
     return React.createClass(cls);
 }
 
-const MyTODOView = createClass({
+const LRView = createClass({
     render() {
         return (
-            <View style={styles.container}>
-                <TouchableHighlight onPress={this.props.save}>
-                    <Text style={styles.welcome}>
-                        {this.state.name}, Welcome to React Native Desktop!
-                    </Text>
-                </TouchableHighlight>
-                <Text style={styles.instructions}>
-                    To get started, edit index.osx.js
-                </Text>
-                <Text style={styles.instructions}>
-                    Press Cmd+R to reload,{'\n'}
-                    Or use Developer Menu
-                </Text>
+            <View>
+                <Text>Left:</Text> 
+                <View>{this.state.left}</View>
             </View>
         );
     }
 });
 
+const MyTODOListView = createClass({
+    render() {
+        console.log("MyTODOListView.render", this)
+        var items = this.state.items.map(function(item, i){
+            return <Text key={i}>{item}</Text>
+        })
+
+        return (
+            <View>
+                <Text>List</Text>
+                {items}
+            </View>
+        )
+    }
+})
+
+const MyTODODetailView = createClass({
+    render() {
+        return <View><Text>Detail:</Text> <Text>{this.state.item}</Text></View>
+    }
+})

@@ -1,14 +1,24 @@
 # -*- coding: utf-8 -*-
 
 class ReactyWidget:
-    def __init__(self, component, data, evts):
+    def __init__(self, parent, component, data, evts):
+        console.log("ReactyWidget.__init__", parent, data, evts)
+        if not evts:
+            evts = {}
         self.component = component
+        self.parent = parent
         self.evts = evts
-        self.evts.parent = self
+        self.evts.init = self.init.bind(self)
         self.data = data
 
         if self.data.is_observable:
             self.data.connect(self.rerender.bind(self))
+
+    def init(self, robj):
+        console.log("ReactyWidget.init", self.parent, robj)
+        self.robj = robj
+        if self.parent:
+            self.parent.init()
 
     def rerender(self, data):
         if not self.robj:

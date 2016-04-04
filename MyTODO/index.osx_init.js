@@ -1,4 +1,7 @@
 const MyTODO = React.createClass({
+  componentWillMount() {
+    root = this;
+  },
   render() {
     return app.render()
   }
