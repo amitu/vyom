@@ -1,56 +1,22 @@
 # -*- coding: utf-8 -*-
 
-class BaseWidget:
-    """
-    Life cycle of a widget:
-
-    1. arguments are passed to constructor, based on which initialize instance
-    2. create dom tree
-    3. post process dom tree
-
-    Widget has fields, default value is class level defined.
-
-    Widget object is constructed. Can accept arguments.
-
-    .init(), arguments are passed.
-    """
-    def __init__(self, data):
-        self.data = data
-
-        self.init()
-
-        self.create_tree()
-        self.post_create()
-
-    def create_tree(self):
-        pass
-
-    def init(self):
-        pass
-
-    def post_create(self):
-        pass
-
-    def place_at(self, place):
-        place.appendChild(self.elem)
-
-    def empty(self):
-        while self.elem.firstChild:
-            self.elem.removeChild(self.elem.firstChild)
-
-
-class ReactyWidget(BaseWidget):
-    def __init__(self, component, args, evts):
+class ReactyWidget:
+    def __init__(self, component, data, evts):
         self.component = component
         self.evts = evts
-        BaseWidget.__init__(self, args)
+        self.evts.parent = self
+        self.data = data
 
-    def create_tree(self):
-        if self.data.is_observable:
-            self.data.connect(self.rerender.bind(self))
         self.render()
 
+        if self.data.is_observable:
+            self.data.connect(self.rerender.bind(self))
+
     def rerender(self, data):
+        if not self.robj:
+            console.log("rerender called before self.robj was set")
+            return
+        console.log("rerender", self, data)
         self.robj.setState(data)
 
     def render(self):
@@ -58,5 +24,4 @@ class ReactyWidget(BaseWidget):
             data = self.data()
         else:
             data = self.data
-
         return React.createElement(self.component, self.evts)

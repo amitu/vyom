@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import vyom2.types
+# import vyom2.types
 from vyom2 import NotPassed
 
 
-def Observable(val=None, type=vyom2.types.Any):
+def Observable(val=None):
     # TODO: type is inspired by React's propType
     # look at React's documentation to see all types
     # and possibly how to implement the checks.

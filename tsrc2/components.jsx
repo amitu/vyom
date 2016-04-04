@@ -7,13 +7,19 @@ const {
 } = React;
 
 
-const MyTODOView = React.createClass({
+function createClass(cls) {
+    cls.componentWillMount = function() {
+        this.props.parent.robj = this;
+        if (this.props.state)
+            this.setState(this.props.state);
+    }
+
+    return React.createClass(cls);
+}
+
+const MyTODOView = createClass({
     getInitialState() {
         return {"name": "foo"};
-    },
-    componentWillMount() {
-        console.log("MyTODOView.componentWillMount", this.props, this.state);
-        this.props.ctrlr.robj = this;
     },
     render() {
         return (

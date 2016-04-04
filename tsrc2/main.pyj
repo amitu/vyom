@@ -1,11 +1,13 @@
 from vyom2.controllers import Controller
+from vyom2.events import Observable
 from vyom2.widgets import ReactyWidget
 
 class TODO(Controller):
 	def init(self, root):
 		self.root = root
-		self.widget = ReactyWidget(MyTODOView, {}, {
-			"ctrlr": self
+		self.data = Observable({"name": "init"})
+		self.widget = ReactyWidget(MyTODOView, self.data, {
+			"save": self.save.bind(self)
 		})
 		setTimeout(self.save.bind(self), 1000)
 
@@ -14,7 +16,7 @@ class TODO(Controller):
 
 	def save(self):
 		console.log("save", self.robj)
-		self.robj.setState({"name": "amitu"})
+		self.data({"name": "amitu"})
 		# evt.preventDefault()
 
 todo = None
