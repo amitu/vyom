@@ -1,0 +1,20 @@
+{
+    "name": "vyom",
+    "description": "vyom",
+    "repository": {
+        "type": "git",
+        "url": "https://bitbucket.com/amitupadhyay/vyom"
+    },
+    "version": "0.1.0",
+    "dependencies": {
+        "rapydscript-ng": "0.4.9",
+        "babel-cli": "^6.0.0",
+        "babel-plugin-transform-react-jsx": "^6.7.4",
+        "react-native-desktop-cli": "^0.1.11"
+    },
+    "author": "Amit Upadhyay",
+    "contributors": [
+        "Amit Upadhyay <upadhyay@gmail.com> (http://amitu.com)"
+    ],
+    "license": "BSD"
+}

@@ -1,0 +1,68 @@
+# -*- coding: utf-8 -*-
+from vyom import object
+
+
+class BaseWidget(object):
+    """
+    Life cycle of a widget:
+
+    1. arguments are passed to constructor, based on which initialize instance
+    2. create dom tree
+    3. post process dom tree
+
+    Widget has fields, default value is class level defined.
+
+    Widget object is constructed. Can accept arguments.
+
+    .init(), arguments are passed.
+    """
+    def __init__(self, elem, data):
+        self.data = data
+        self.elem = elem
+
+        self.init()
+
+        self.create_tree()
+        self.post_create()
+
+    def create_tree(self):
+        pass
+
+    def init(self):
+        pass
+
+    def post_create(self):
+        pass
+
+    def place_at(self, place):
+        place.appendChild(self.elem)
+
+    def empty(self):
+        while self.elem.firstChild:
+            self.elem.removeChild(self.elem.firstChild)
+
+
+class ReactyWidget(BaseWidget):
+    def __init__(self, elem, args, component, evts):
+        self.component = component
+        self.evts = evts
+        BaseWidget.__init__(self, elem, args)
+
+    def create_tree(self):
+        if self.data.is_observable:
+            self.data.connect(self.rerender.bind(self))
+        self.render()
+
+    def rerender(self, data):
+        self.robj.setState(data)
+
+    def render(self):
+        if self.data.is_observable:
+            data = self.data()
+        else:
+            data = self.data
+
+        self.robj = ReactDOM.render(
+            React.createElement(self.component, self.evts), self.elem
+        )
+        self.rerender(data)

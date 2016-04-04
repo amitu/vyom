@@ -1,0 +1,7 @@
+from vyom.parser import parse
+from vyom.utils import init
+
+def main():
+    parse()
+
+init(main)
