@@ -1,9 +1,0 @@
-# -*- coding: utf-8 -*-
-
-def init(fn):
-    jQuery(main)
-    # document.addEventListener("DOMContentLoaded", fn)  # doesn't work
-
-
-def debug(msg):
-    console.log(msg)
