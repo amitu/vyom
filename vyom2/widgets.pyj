@@ -17,7 +17,7 @@ class ReactyWidget:
     def init(self, robj):
         console.log("ReactyWidget.init", self.parent, robj)
         self.robj = robj
-        if self.parent:
+        if self.parent and self.parent.init:
             self.parent.init()
 
     def rerender(self, data):

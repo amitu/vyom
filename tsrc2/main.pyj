@@ -23,9 +23,11 @@ class ToDoList(Controller):
 
 
 class ToDoDetail(Controller):
-	def __init__(self, data, evts):
+	def __init__(self, parent, name, data, evts):
+		self.parent = parent
+		self.name = name
 		self.data = data
-		self.widget = ReactyWidget(MyTODODetailView, self.data, {})
+		self.widget = ReactyWidget(self, MyTODODetailView, self.data, {})
 
 
 class TODO(Controller):
@@ -53,8 +55,9 @@ class TODO(Controller):
 
 		self.add_child("left", self.lctrlr.render())
 
-		# self.current = Observable({"text": "loading.."})
-		# self.rctrlr = ToDoDetail(data=self.current)
+		self.current = Observable({"item": "loading.."})
+		self.rctrlr = ToDoDetail(self, "right", self.current, {})
+		self.add_child("right", self.rctrlr.render())
 
 	def selected(self, item):
 		self.current({"text": item})
@@ -62,7 +65,7 @@ class TODO(Controller):
 	def add_child(self, name, child):
 		console.log(self, name, child)
 		c = self.children()
-		c[name] = self.lctrlr.render()
+		c[name] = child
 		self.children(c)
 
 app = TODO()

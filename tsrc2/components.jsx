@@ -39,6 +39,8 @@ const LRView = createClass({
             <View>
                 <Text>Left:</Text> 
                 <View>{this.state.left}</View>
+                <Text>Right:</Text>
+                <View>{this.state.right}</View>
             </View>
         );
     }
@@ -62,6 +64,6 @@ const MyTODOListView = createClass({
 
 const MyTODODetailView = createClass({
     render() {
-        return <View><Text>Detail:</Text> <Text>{this.state.item}</Text></View>
+        return <View><Text>Detail:</Text><Text>{this.state.item}</Text></View>
     }
 })
