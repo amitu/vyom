@@ -3,7 +3,6 @@
 # import vyom2.types
 from vyom2 import NotPassed
 
-
 def Observable(val=None):
     # TODO: type is inspired by React's propType
     # look at React's documentation to see all types
@@ -36,4 +35,3 @@ def Observable(val=None):
 
     ovable.is_observable = True
     return ovable
-

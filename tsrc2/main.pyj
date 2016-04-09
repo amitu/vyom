@@ -1,67 +1,39 @@
 from vyom2.controllers import Controller
 from vyom2.events import Observable
-from vyom2.widgets import ReactyWidget
 
 
 class ToDoList(Controller):
-	def __init__(self, parent, name, data, evts):
-		console.log("ToDoList.__init__", name, data, evts)
-		self.parent = parent
-		self.name = name
-		self.data = data
-		self.evts = evts
-		self.widget = ReactyWidget(self, MyTODOListView, self.data, {
+	def init(self):
+		self.widget = self.create_widget(MyTODOListView, self.data, {
 			"select": self.selected.bind(self)
 		})
 
-	def init(self):
-		console.log("ToDoList.init", self.parent)
-		# if self.parent:
-		# 	self.parent.add_child(self.name)
-
 	def selected(self, idx, item, evt):
 		# self.emit("selected", self.data()[idx])
-		console.log("selected", idx, item, evt)
 		if self.evts and self.evts.selected:
 			self.evts.selected(item)
 
 
 class ToDoDetail(Controller):
-	def __init__(self, parent, name, data, evts):
-		self.parent = parent
-		self.name = name
-		self.data = data
-		self.evts = evts
-		self.widget = ReactyWidget(self, MyTODODetailView, self.data, {})
+	def init(self):
+		self.widget = self.create_widget(MyTODODetailView, self.data, {})
 
 
 class TODO(Controller):
-	def __init__(self, parent, name, data, evts):
-		self.parent = parent
-		self.name = name
-
-		if not data:
-			data = Observable({"items": ["get milk", "throw milk"]})
-
-		self.data = data
-		self.children = Observable({})
-		self.widget = ReactyWidget(self, LRView, self.children, {})
-
 	def init(self):
-		console.log("TODO.init")
-		if self.parent:
-			self.parent.add_child(self.name, self)
+		self.children = Observable({})
+		self.widget = self.create_widget(LRView, self.children, {})
 
-		console.log("going to render lctrlr", self.data())
-
-		self.lctrlr = ToDoList(self, "left", self.data, {
+	def post_create(self):
+		self.lctrlr = ToDoList(self.data, {
 			"selected": self.selected.bind(self)
 		})
 
 		self.add_child("left", self.lctrlr.render())
 
 		self.current = Observable({"item": "loading.."})
-		self.rctrlr = ToDoDetail(self, "right", self.current, {})
+		self.rctrlr = ToDoDetail(self.current, {})
+
 		self.add_child("right", self.rctrlr.render())
 
 	def selected(self, item):
@@ -73,4 +45,4 @@ class TODO(Controller):
 		c[name] = child
 		self.children(c)
 
-app = TODO()
+app = TODO({"items": ["get milk", "throw milk"]})

@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
+import vyom2
 
 class Controller:
     def __init__(self, data, evts):
-        self.init(data, evts, evts)
+        self.data = data
+        self.evts = evts
+        self.init()
+
+    def init(self):
+        pass
+
+    def postCreate(self):
+        pass
 
     def render(self):
         return self.widget.render()
 
-    def update(self, key, value):
-        data = self.data()
-        data[key] = value
-        self.data(data)
+    def create_widget(self, cls, data, evts):
+        return vyom2.ReactyWidget(self, cls, data, evts)
