@@ -9,9 +9,7 @@ class ToDoList(Controller):
 		})
 
 	def selected(self, idx, item, evt):
-		# self.emit("selected", self.data()[idx])
-		if self.evts and self.evts.selected:
-			self.evts.selected(item)
+		self.emit("selected", (idx, item), evt)
 
 
 class ToDoDetail(Controller):
@@ -35,7 +33,7 @@ class TODO(Controller):
 		self.children({"left": self.lctrlr.render(), "right": self.rctrlr.render()})
 
 	def selected(self, item):
-		self.current({"item": item})
+		self.current({"item": item[1]})
 
 
 app = TODO({"items": ["get milk", "throw milk"]})

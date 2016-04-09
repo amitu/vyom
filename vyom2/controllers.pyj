@@ -18,3 +18,7 @@ class Controller:
 
     def create_widget(self, cls, data, evts):
         return vyom2.ReactyWidget(self, cls, data, evts)
+
+    def emit(self, signal, data, evt):
+        if self.evts and self.evts[signal]:
+            self.evts[signal](data, evt)
