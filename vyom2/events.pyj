@@ -26,7 +26,7 @@ def Observable(val=None):
     value = val
     connections = list()
 
-    ovable = def(val=NotPassed, replace=False):
+    ovable = def (val=NotPassed, replace=False):
         nonlocal value
         if val is NotPassed:
             return value
@@ -44,7 +44,7 @@ def Observable(val=None):
         connections.append(fn)
 
         return {
-            "remove": def():
+            "remove": def ():
                 connections.remove(fn)
         }
 
