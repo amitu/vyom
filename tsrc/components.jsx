@@ -1,64 +1,77 @@
-var ProgressView = React.createClass({
-	displayName: "ProgressView",
-	getInitialState: function () {
-		return {"current": 0, "total": 1}
-	},
-	render: function() {
-		return <span>
-			Progress: <span onMouseOver={this.props.hover}>{this.state.current}</span>/{this.state.total}.
-		</span>
-	}
+import React from 'react-native-desktop';
+
+const {
+    Text,
+    View,
+    AppRegistry,
+    TouchableHighlight,
+    StyleSheet
+} = React;
+
+
+function createClass(cls) {
+    if (!cls.componentWillMount) {
+        cls.componentWillMount = function() {
+            if (this.props.state)
+                this.setState(this.props.state);
+        }
+    }
+
+    if (!cls.componentDidMount) {
+        cls.componentDidMount = function() {
+            console.log("componentDidMount", this.props.init, this.props)
+            if (this.props.init)
+                this.props.init(this);
+        }
+    }
+
+    if (!cls.getInitialState) {
+        cls.getInitialState = function() {
+            return {};
+        }
+    }
+
+    return React.createClass(cls);
+}
+
+const LRView = createClass({
+    render() {
+        return (
+            <View>
+                <Text>Left:</Text> 
+                <View>{this.state.left}</View>
+                <Text>Right:</Text>
+                <View>{this.state.right}</View>
+            </View>
+        );
+    }
 });
 
-var RecordView = React.createClass({
-	displayName: "RecordView",
-	getInitialState: function () {
-		return {
-            "deleting": false, "deleted": false,
-            "editing": false, "saving": false, "saved": false
-        }
-	},
-    cancelEdit: function(evt) {
-        this.setState({"editing": false})
-        evt.preventDefault()
-    },
-    doEdit: function(evt) {
-        this.setState({"editing": true})
-        evt.preventDefault()
-    },
-	render: function() {
-        if (this.state.saved) {
-            return <div>
-                <p>saved {this.state.index}: {this.state.line}</p>
-            </div>
-        }
-        if (this.state.saving) {
-            return <div>
-                <p>saving {this.state.index}...</p>
-            </div>
-        }
-        if (this.state.deleting) {
-            return <div>
-                <p>deleting {this.state.index}...</p>
-            </div>
-        }
-        if (this.state.deleted) {
-            return <div>
-                <p>deleted {this.state.index}</p>
-            </div>
-        }
-        if (this.state.editing) {
-            return <div>
-                <p>Editing {this.state.index}: {this.state.line}</p>
-                <a href="#" onClick={this.props.save}>Save</a>
-                <a href="#" onClick={this.cancelEdit}>Cancel</a>
-            </div>
-        }
-		return <div>
-            <a href="#" onClick={this.props.delete}>Delete</a>
-            <a href="#" onClick={this.doEdit}>Edit</a>
-            <p>{this.state.index}: {this.state.line}</p>
-		</div>
-	}
-});
+const MyTODOListView = createClass({
+    render() {
+        console.log("MyTODOListView.render", this);
+        var self = this;
+        var items = this.state.items.map(function(item, i){
+            function pressed(evt) {
+                console.log(evt, item, i);
+                self.props.select(i, item, evt);
+            }
+            return <TouchableHighlight onPress={pressed} key={i}>
+                <Text>{item}</Text>
+            </TouchableHighlight>
+        })
 
+        return (
+            <View>
+                <Text>List</Text>
+                {items}
+            </View>
+        )
+    }
+})
+
+const MyTODODetailView = createClass({
+    render() {
+        return <View><Text>Detail:</Text><Text>{this.state.item}</Text></View>
+    }
+})

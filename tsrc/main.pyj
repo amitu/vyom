@@ -1,7 +1,41 @@
-from vyom.parser import parse
-from vyom.utils import init
+from vyom.controllers import Controller, PTController
+from vyom.events import Observable
 
-def main():
-    parse()
 
-init(main)
+class ToDoList(Controller):
+	def init(self):
+		self.widget = self.create_widget(MyTODOListView, self.data, {
+			"select": self.selected.bind(self)
+		})
+
+	def selected(self, idx, item, evt):
+		self.emit("selected", (idx, item), evt)
+
+
+class ToDoDetail(PTController):
+	component = MyTODODetailView
+
+
+class TODO(Controller):
+	def init(self):
+		self.children = Observable({})
+		self.widget = self.create_widget(LRView, self.children)
+
+	def post_create(self):
+		self.lctrlr = ToDoList(self.data, {
+			"selected": self.selected.bind(self)
+		})
+
+		self.current = Observable({"item": "loading.."})
+		self.rctrlr = new ToDoDetail(self.current, {})
+
+		self.children({
+			"left": self.lctrlr.render(),
+			"right": self.rctrlr.render()
+		})
+
+	def selected(self, item):
+		self.current({"item": item[1]})
+
+
+app = TODO({"items": ["get milk", "throw milk"]})

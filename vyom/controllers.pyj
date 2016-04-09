@@ -1,16 +1,29 @@
 # -*- coding: utf-8 -*-
+import vyom
 
-from vyom import object
+class Controller:
+    def __init__(self, data, evts={}):
+        self.data = data
+        self.evts = evts
+        self.init()
 
-
-class Controller(object):
-    def __init__(self, elem, args):
-        self.init(elem, args)
-
-    def init(self, elem, args):
+    def init(self):
         pass
 
-    def update(self, key, value):
-        data = self.data()
-        data[key] = value
-        self.data(data)
+    def postCreate(self):
+        pass
+
+    def render(self):
+        return self.widget.render()
+
+    def create_widget(self, cls, data, evts):
+        return vyom.ReactyWidget(self, cls, data, evts)
+
+    def emit(self, signal, data, evt):
+        if self.evts and self.evts[signal]:
+            self.evts[signal](data, evt)
+
+
+class PTController(Controller):
+    def init(self):
+        self.widget = self.create_widget(self.component, self.data, self.evts)

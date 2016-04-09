@@ -14,9 +14,9 @@ test/test.js: tsrc/main.pyj vyom/*/*.pyj tsrc/components.jsx node_modules
 	cat vendor/{jquery-2.2.2.min.js,react.js,react.dom.js} test/{c,t}.js > $@
 	rm test/{c,t}.js
 
-MyTODO/index.osx.js: tsrc2/main.pyj MyTODO/index.osx_init.js vyom2/*.pyj tsrc2/* node_modules
+MyTODO/index.osx.js: tsrc/main.pyj MyTODO/index.osx_init.js vyom/*.pyj tsrc/* node_modules
 	${rapydscript} compile --import-path . --bare $< --output t.js
-	${babel} tsrc2/components.jsx > c.js
+	${babel} tsrc/components.jsx > c.js
 	cat {c,t}.js MyTODO/index.osx_init.js > $@
 	rm {c,t}.js
 
