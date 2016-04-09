@@ -48,9 +48,16 @@ const LRView = createClass({
 
 const MyTODOListView = createClass({
     render() {
-        console.log("MyTODOListView.render", this)
+        console.log("MyTODOListView.render", this);
+        var self = this;
         var items = this.state.items.map(function(item, i){
-            return <Text key={i}>{item}</Text>
+            function pressed(evt) {
+                console.log(evt, item, i);
+                self.props.select(i, item, evt);
+            }
+            return <TouchableHighlight onPress={pressed} key={i}>
+                <Text>{item}</Text>
+            </TouchableHighlight>
         })
 
         return (

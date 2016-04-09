@@ -9,6 +9,7 @@ class ToDoList(Controller):
 		self.parent = parent
 		self.name = name
 		self.data = data
+		self.evts = evts
 		self.widget = ReactyWidget(self, MyTODOListView, self.data, {
 			"select": self.selected.bind(self)
 		})
@@ -18,8 +19,11 @@ class ToDoList(Controller):
 		# if self.parent:
 		# 	self.parent.add_child(self.name)
 
-	def selected(self, idx):
-		self.emit("selected", self.data()[idx])
+	def selected(self, idx, item, evt):
+		# self.emit("selected", self.data()[idx])
+		console.log("selected", idx, item, evt)
+		if self.evts and self.evts.selected:
+			self.evts.selected(item)
 
 
 class ToDoDetail(Controller):
@@ -27,6 +31,7 @@ class ToDoDetail(Controller):
 		self.parent = parent
 		self.name = name
 		self.data = data
+		self.evts = evts
 		self.widget = ReactyWidget(self, MyTODODetailView, self.data, {})
 
 
@@ -60,7 +65,7 @@ class TODO(Controller):
 		self.add_child("right", self.rctrlr.render())
 
 	def selected(self, item):
-		self.current({"text": item})
+		self.current({"item": item})
 
 	def add_child(self, name, child):
 		console.log(self, name, child)
