@@ -6,12 +6,9 @@ class Exception(Error):
         self.message = message
 
 
-# class object:
-#     pass
-
-
 def NotPassed():
 	pass
+
 
 NotPassed = new NotPassed()
 

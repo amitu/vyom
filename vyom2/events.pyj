@@ -3,6 +3,18 @@
 # import vyom2.types
 from vyom2 import NotPassed
 
+
+def merge(o1, o2):
+    o = {}
+    for key in o1:
+        if o1.hasOwnProperty(key):
+            o[key] = o1[key]
+    for key in o2:
+        if o2.hasOwnProperty(key):
+            o[key] = o2[key]
+    return o
+
+
 def Observable(val=None):
     # TODO: type is inspired by React's propType
     # look at React's documentation to see all types
@@ -14,13 +26,16 @@ def Observable(val=None):
     value = val
     connections = list()
 
-    ovable = def(val=NotPassed):
+    ovable = def(val=NotPassed, replace=False):
         nonlocal value
         if val is NotPassed:
             return value
 
         ovalue = value
-        value = val
+        if replace:
+            value = val
+        else:
+            value = merge(ovalue, val)
 
         for fn in connections:
             fn(value, ovalue)
