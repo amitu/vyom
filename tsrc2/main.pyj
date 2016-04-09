@@ -29,20 +29,13 @@ class TODO(Controller):
 			"selected": self.selected.bind(self)
 		})
 
-		self.add_child("left", self.lctrlr.render())
-
 		self.current = Observable({"item": "loading.."})
 		self.rctrlr = ToDoDetail(self.current, {})
 
-		self.add_child("right", self.rctrlr.render())
+		self.children({"left": self.lctrlr.render(), "right": self.rctrlr.render()})
 
 	def selected(self, item):
 		self.current({"item": item})
 
-	def add_child(self, name, child):
-		console.log(self, name, child)
-		c = self.children()
-		c[name] = child
-		self.children(c)
 
 app = TODO({"items": ["get milk", "throw milk"]})
