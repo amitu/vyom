@@ -10,7 +10,10 @@ class Exception(Error):
 #     pass
 
 
-NotPassed = 123123
+def NotPassed():
+	pass
+
+NotPassed = new NotPassed()
 
 
 def value(o):
