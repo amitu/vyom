@@ -50,27 +50,39 @@ HeaderView = createClass({
     render: function() {
         return <div>
             <h1>todos</h1>
-            <input className="new-todo" ref="inp" onKeyPress={this.onKey} placeholder="What needs to be done?" />
+            <input className="new-todo" ref="inp"
+                onKeyPress={this.onKey} placeholder="What needs to be done?" />
         </div>
     }
 })
 
 MainView = createClass({
+    shouldBeChecked: function() {
+        // if all tasks are done, then this should be checked
+        for (i = 0; i < this.state.todos.length; i++) {
+            if (!this.state.todos[i].done)
+                return ""
+        }
+        return "checked"
+    },
     render: function() {
+        var self = this;
         var items = this.state.todos.map(function(item, i){
+            checkit = function(evt) {
+                self.props.toggle(i, evt.target.checked);
+            }
             return <li key={i}>
                 <div className="view">
-                    <input className="toggle" type="checkbox" />
+                    <input className="toggle" type="checkbox" onChange={checkit}/>
                     <label>{item.text}</label>
                     <button className="destroy"></button>
                 </div>
             </li>
         })
 
-                // <input className="edit" value={item.text} />
-
         return <div>
-            <input className="toggle-all" id="toggle-all" type="checkbox" />
+            <input className="toggle-all" id="toggle-all" checked={this.shouldBeChecked()}
+                type="checkbox" onChange={this.props.toggle_all} />
             <label htmlFor="toggle-all">Mark all as complete</label>
             <ul className="todo-list">{items}</ul>
         </div>

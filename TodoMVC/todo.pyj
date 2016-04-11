@@ -37,8 +37,22 @@ class Main(ShowHide):
     def init(self):
         self.elem = self.data.elem
         self.data = Observable({"todos": todos()})
-        self.widget = self.create_widget(MainView, self.data, {})
+        self.widget = self.create_widget(MainView, self.data, {
+            "toggle_all": self.toggle_all.bind(self),
+            "toggle": self.toggle.bind(self),
+        })
         self.show_hide_init()
+
+    def toggle(self, idx, checked):
+        c = todos()
+        c[idx].done = checked
+        todos(c, True)
+
+    def toggle_all(self, evt):
+        c = todos()
+        for item in c:
+            item.done = evt.target.checked
+        todos(c, True)
 
 
 class Footer(ShowHide):
