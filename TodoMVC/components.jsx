@@ -4,12 +4,26 @@ function createClass(cls) {
             if (this.props.state)
                 this.setState(this.props.state);
         }
+    } else {
+        var will = cls.componentWillMount;
+        cls.componentWillMount = function() {
+            if (this.props.state)
+                this.setState(this.props.state);
+            will();
+        }
     }
 
     if (!cls.componentDidMount) {
         cls.componentDidMount = function() {
             if (this.props.init)
                 this.props.init(this);
+        }
+    } else {
+        var did = cls.componentDidMount;
+        cls.componentDidMount = function() {
+            if (this.props.init)
+                this.props.init(this);
+            did.call(this);
         }
     }
 
@@ -24,10 +38,19 @@ function createClass(cls) {
 
 
 HeaderView = createClass({
+    componentDidMount: function(){
+        ReactDOM.findDOMNode(this.refs.inp).focus();
+    },
+    onKey: function(e) {
+        if (e.key === 'Enter') {
+            this.props.input(e.target.value);
+            e.target.value = '';
+        }
+    },
     render: function() {
         return <div>
             <h1>todos</h1>
-            <input className="new-todo" placeholder="What needs to be done?" autofocus />
+            <input className="new-todo" ref="inp" onKeyPress={this.onKey} placeholder="What needs to be done?" />
         </div>
     }
 })

@@ -7,8 +7,14 @@ from vyom.events import Observable
 class Header(Controller):
     def init(self):
         console.log("Header.init")
-        self.widget = self.create_widget(HeaderView, {}, {})
+        self.widget = self.create_widget(HeaderView, {}, {
+            "input": self.input.bind(self)
+        })
 
+    def input(self, value):
+        c = todos()
+        c.push(value)
+        todos(c, True)
 
 class ShowHide(Controller):
     def show_hide_init(self):

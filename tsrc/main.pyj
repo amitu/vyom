@@ -27,7 +27,7 @@ class TODO(Controller):
 		})
 
 		self.current = Observable({"item": "loading.."})
-		self.rctrlr = new ToDoDetail(self.current, {})
+		self.rctrlr = ToDoDetail(self.current, {})
 
 		self.children({
 			"left": self.lctrlr.render(),
