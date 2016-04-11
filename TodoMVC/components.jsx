@@ -68,14 +68,21 @@ MainView = createClass({
     render: function() {
         var self = this;
         var items = this.state.todos.map(function(item, i){
-            checkit = function(evt) {
+            var checkit = function(evt) {
                 self.props.toggle(i, evt.target.checked);
             }
-            return <li key={i}>
+            var deleteit = function(evt) {
+                self.props.deleteit(i);
+            }
+
+            var className = "";
+            if (item.done) className = "completed";
+
+            return <li key={i} className={className}>
                 <div className="view">
                     <input className="toggle" type="checkbox" onChange={checkit}/>
                     <label>{item.text}</label>
-                    <button className="destroy"></button>
+                    <button className="destroy" onClick={deleteit}></button>
                 </div>
             </li>
         })

@@ -9,7 +9,8 @@ todos = Observable([])
 
 class Header(Controller):
     def init(self):
-        self.widget = self.create_widget(HeaderView, {}, {
+        self.data = Observable({"todos": todos()})
+        self.widget = self.create_widget(HeaderView, self.data, {
             "input": self.input.bind(self)
         })
 
@@ -40,8 +41,14 @@ class Main(ShowHide):
         self.widget = self.create_widget(MainView, self.data, {
             "toggle_all": self.toggle_all.bind(self),
             "toggle": self.toggle.bind(self),
+            "deleteit": self.deleteit.bind(self),
         })
         self.show_hide_init()
+
+    def deleteit(self, idx):
+        c = todos()
+        c.splice(idx, 1)
+        todos(c, True)
 
     def toggle(self, idx, checked):
         c = todos()
