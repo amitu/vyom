@@ -66,8 +66,19 @@ class Footer(ShowHide):
     def init(self):
         self.elem = self.data.elem
         self.data = Observable({"todos": todos()})
-        self.widget = self.create_widget(FooterView, self.data, {})
+        self.widget = self.create_widget(FooterView, self.data, {
+            "clear_completed": self.clear_completed.bind(self)
+        })
         self.show_hide_init()
+
+    def clear_completed(self):
+        c = todos()
+        newc = []
+        for item in c:
+            if item.done:
+                continue
+            newc.push(item)
+        todos(newc, True)
 
 
 def main():

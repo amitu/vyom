@@ -128,7 +128,8 @@ FooterView = createClass({
                     <a href="#/completed">Completed</a>
                 </li>
             </ul>
-            <button className="clear-completed">Clear completed</button>
+            <button className="clear-completed"
+                onClick={this.props.clear_completed}>Clear completed</button>
         </div>
     }
 })
