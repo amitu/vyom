@@ -1,3 +1,4 @@
 test/test.js
 *.pyj-cached
 index.osx.js
+TodoMVC/todo.js
