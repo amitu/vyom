@@ -5,7 +5,7 @@ from vyom.events import Observable
 
 
 todos = Observable([])
-
+the_filter = Observable("all")
 
 class Header(Controller):
     def init(self):
@@ -24,6 +24,10 @@ class ShowHide(Controller):
     def show_hide_init(self):
         self.show_hide()
         todos.connect(self.show_hide.bind(self))
+        the_filter.connect(self.on_filter.bind(self))
+
+    def on_filter(self):
+        self.data({"filter": the_filter()})
 
     def show_hide(self):
         data = todos()
@@ -37,7 +41,7 @@ class ShowHide(Controller):
 class Main(ShowHide):
     def init(self):
         self.elem = self.data.elem
-        self.data = Observable({"todos": todos()})
+        self.data = Observable({"todos": todos(), "filter": the_filter()})
         self.widget = self.create_widget(MainView, self.data, {
             "toggle_all": self.toggle_all.bind(self),
             "toggle": self.toggle.bind(self),
@@ -65,11 +69,23 @@ class Main(ShowHide):
 class Footer(ShowHide):
     def init(self):
         self.elem = self.data.elem
-        self.data = Observable({"todos": todos()})
+        self.data = Observable({"todos": todos(), "filter": the_filter()})
         self.widget = self.create_widget(FooterView, self.data, {
-            "clear_completed": self.clear_completed.bind(self)
+            "clear_completed": self.clear_completed.bind(self),
+            "filter_all": self.filter_all.bind(self),
+            "filter_active": self.filter_active.bind(self),
+            "filter_completed": self.filter_completed.bind(self),
         })
         self.show_hide_init()
+
+    def filter_all(self):
+        the_filter("all", true)
+
+    def filter_active(self):
+        the_filter("active", true)
+
+    def filter_completed(self):
+        the_filter("completed", true)
 
     def clear_completed(self):
         c = todos()

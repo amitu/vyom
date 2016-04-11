@@ -67,7 +67,18 @@ MainView = createClass({
     },
     render: function() {
         var self = this;
-        var items = this.state.todos.map(function(item, i){
+        var items = this.state.todos.filter(function(item){
+            if (this.state.filter == "all") {
+                return true
+            }
+            if (this.state.filter == "completed") {
+                return item.done;
+            }
+            if (this.state.filter == "active") {
+                return !item.done;
+            }
+            return false;
+        }, this).map(function(item, i){
             var checkit = function(evt) {
                 self.props.toggle(i, evt.target.checked);
             }
@@ -76,16 +87,20 @@ MainView = createClass({
             }
 
             var className = "";
-            if (item.done) className = "completed";
+            var checked = ""
+            if (item.done) {
+                className = "completed";
+                checked = "checked";
+            }
 
-            return <li key={i} className={className}>
+            return <li key={item.text + item.i} className={className}>
                 <div className="view">
-                    <input className="toggle" type="checkbox" onChange={checkit}/>
+                    <input className="toggle" type="checkbox" checked={checked} onChange={checkit} />
                     <label>{item.text}</label>
                     <button className="destroy" onClick={deleteit}></button>
                 </div>
             </li>
-        })
+        }, this);
 
         return <div>
             <input className="toggle-all" id="toggle-all" checked={this.shouldBeChecked()}
@@ -113,19 +128,23 @@ FooterView = createClass({
     },
     render: function() {
         var remaining = this.getRemaining();
+        var all_selected = this.state.filter == "all" ? "selected" : "";
+        var active_selected = this.state.filter == "active" ? "selected" : "";
+        var completed_selected = this.state.filter == "completed" ? "selected" : "";
+
         return <div>
             <span className="todo-count">
                 <strong>{remaining}</strong> {this.item_or_items()} left
             </span>
             <ul className="filters">
                 <li>
-                    <a className="selected" href="#/">All</a>
+                    <a className={all_selected} href="#/" onClick={this.props.filter_all}>All</a>
                 </li>
                 <li>
-                    <a href="#/active">Active</a>
+                    <a className={active_selected} href="#/active" onClick={this.props.filter_active}>Active</a>
                 </li>
                 <li>
-                    <a href="#/completed">Completed</a>
+                    <a className={completed_selected} href="#/completed" onClick={this.props.filter_completed}>Completed</a>
                 </li>
             </ul>
             <button className="clear-completed"
