@@ -14,6 +14,9 @@ class Controller:
         pass
 
     def render(self):
+        if not self.widget:
+            console.log("Controller.render() called before .widget is initialised.")
+            return
         return self.widget.render()
 
     def create_widget(self, cls, data, evts):

@@ -20,8 +20,16 @@ MyTODO/index.osx.js: tsrc/main.pyj MyTODO/index.osx_init.js vyom/*.pyj tsrc/* no
 	cat {c,t}.js MyTODO/index.osx_init.js > $@
 	rm {c,t}.js
 
+TodoMVC/todo.js: TodoMVC/todo.pyj TodoMVC/components.jsx vyom/*.pyj
+	${rapydscript} compile --import-path . --bare TodoMVC/todo.pyj --output t.js
+	${babel} TodoMVC/components.jsx > c.js
+	cat vendor/{jquery-2.2.2.min.js,react.js,react.dom.js} {c,t}.js > TodoMVC/todo.js
+	rm {c,t}.js
+
 clean:
 	-rm test/test.js
+	-rm MyTODO/index.osx.js
+	-rm TodoMVC/todo.js
 
 help:  ## Show this help.
 	@IFS=$$'\n' ; \

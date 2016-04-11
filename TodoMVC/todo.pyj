@@ -1,0 +1,46 @@
+from vyom.parser import parse
+from vyom.utils import init
+from vyom.controllers import Controller
+from vyom.events import Observable
+
+
+class Header(Controller):
+    def init(self):
+        console.log("Header.init")
+        self.widget = self.create_widget(HeaderView, {}, {})
+
+
+class ShowHide(Controller):
+    def show_hide_init(self):
+        self.show_hide()
+        todos.connect(self.show_hide.bind(self))
+
+    def show_hide(self):
+        console.log("show_hide", todos().length)
+        if todos().length == 0:
+            $(self.data.elem).hide()
+        else:
+            $(self.data.elem).show()
+
+
+class Main(ShowHide):
+    def init(self):
+        self.widget = self.create_widget(MainView, {}, {})
+        self.show_hide_init()
+
+
+class Footer(ShowHide):
+    def init(self):
+        self.widget = self.create_widget(FooterView, {}, {})
+        self.show_hide_init()
+
+
+todos = Observable([])
+
+
+def main():
+    console.log("yo")
+    parse()
+
+
+init(main)
