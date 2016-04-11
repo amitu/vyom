@@ -57,10 +57,22 @@ HeaderView = createClass({
 
 MainView = createClass({
     render: function() {
+        var items = this.state.todos.map(function(item, i){
+            return <li key={i}>
+                <div className="view">
+                    <input className="toggle" type="checkbox" />
+                    <label>{item.text}</label>
+                    <button className="destroy"></button>
+                </div>
+            </li>
+        })
+
+                // <input className="edit" value={item.text} />
+
         return <div>
             <input className="toggle-all" id="toggle-all" type="checkbox" />
             <label htmlFor="toggle-all">Mark all as complete</label>
-            <ul className="todo-list"></ul>
+            <ul className="todo-list">{items}</ul>
         </div>
     }
 })
@@ -71,10 +83,20 @@ FooterView = createClass({
             return 'item';
         return 'items';
     },
+    getRemaining: function() {
+        var count = 0;
+        for (i = 0; i < this.state.todos.length; i++) {
+            if (!this.state.todos[i].done)
+                count += 1;
+        }
+        this.state.remaining = count;
+        return count;
+    },
     render: function() {
+        var remaining = this.getRemaining();
         return <div>
             <span className="todo-count">
-                <strong>{this.state.remaining}</strong> {this.item_or_items()} left
+                <strong>{remaining}</strong> {this.item_or_items()} left
             </span>
             <ul className="filters">
                 <li>

@@ -4,17 +4,20 @@ from vyom.controllers import Controller
 from vyom.events import Observable
 
 
+todos = Observable([])
+
+
 class Header(Controller):
     def init(self):
-        console.log("Header.init")
         self.widget = self.create_widget(HeaderView, {}, {
             "input": self.input.bind(self)
         })
 
     def input(self, value):
         c = todos()
-        c.push(value)
+        c.push({"text": value, "done": False})
         todos(c, True)
+
 
 class ShowHide(Controller):
     def show_hide_init(self):
@@ -22,30 +25,31 @@ class ShowHide(Controller):
         todos.connect(self.show_hide.bind(self))
 
     def show_hide(self):
-        console.log("show_hide", todos().length)
-        if todos().length == 0:
-            $(self.data.elem).hide()
+        data = todos()
+        if data.length == 0:
+            $(self.elem).hide()
         else:
-            $(self.data.elem).show()
+            $(self.elem).show()
+        self.data({"todos": data})
 
 
 class Main(ShowHide):
     def init(self):
-        self.widget = self.create_widget(MainView, {}, {})
+        self.elem = self.data.elem
+        self.data = Observable({"todos": todos()})
+        self.widget = self.create_widget(MainView, self.data, {})
         self.show_hide_init()
 
 
 class Footer(ShowHide):
     def init(self):
-        self.widget = self.create_widget(FooterView, {}, {})
+        self.elem = self.data.elem
+        self.data = Observable({"todos": todos()})
+        self.widget = self.create_widget(FooterView, self.data, {})
         self.show_hide_init()
 
 
-todos = Observable([])
-
-
 def main():
-    console.log("yo")
     parse()
 
 
