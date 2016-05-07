@@ -1,3 +1,4 @@
+# from __python__ import dict_literals, overload_getitem
 # -*- coding: utf-8 -*-
 
 def init(fn):
@@ -7,3 +8,13 @@ def init(fn):
 
 def debug(msg):
     console.log(msg)
+
+
+def clone(obj):
+    o = {}
+    for key in obj:
+        if obj.hasOwnProperty:
+            if not obj.hasOwnProperty(key):
+                continue
+        o[key] = obj[key]
+    return o

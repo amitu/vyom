@@ -8,6 +8,7 @@ node_modules: ## Install dependencies.
 node_modules: package.json
 	npm install
 
+test/test.js: ## Main test file
 test/test.js: tsrc/main.pyj vyom/*/*.pyj tsrc/components.jsx node_modules
 	${rapydscript} compile --import-path . --bare $< --output test/t.js
 	${babel} tsrc/components.jsx > test/c.js

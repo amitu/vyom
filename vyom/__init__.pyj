@@ -1,3 +1,4 @@
+# from __python__ import dict_literals, overload_getitem
 # -*- coding: utf-8 -*-
 
 
@@ -41,7 +42,8 @@ class ReactyWidget:
         if not self.robj:
             console.log("rerender called before self.robj was set")
             return
-        self.robj.setState(data)
+        if self.robj.isMounted():
+            self.robj.setState(data)
 
     def render(self):
         self.evts.state = value(self.data)
